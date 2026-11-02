@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ulangan Dasar-Dasar Pemasaran Kelas X</title>
+<style>
+:root{--bg:#f4f6fb;--fg:#1c1f2a;--card:#fff;--bd:#d6dae6;--ac:#0b5fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12141b;--fg:#e8eaf2;--card:#1c1f2a;--bd:#363b4d;--ac:#7aa7ff}}
+:root[data-theme="dark"]{--bg:#12141b;--fg:#e8eaf2;--card:#1c1f2a;--bd:#363b4d;--ac:#7aa7ff}
+html,body{margin:0}body{background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,sans-serif}
+main{max-width:760px;margin:0 auto;padding:12px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin:12px 0;-webkit-user-select:none;user-select:none}
+label{display:flex;gap:8px;padding:7px 8px;border-radius:8px;cursor:pointer}label:hover{background:var(--bg)}
+input[type=text],textarea,select{width:100%;box-sizing:border-box;font:inherit;padding:9px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--fg);-webkit-user-select:text;user-select:text}
+textarea{min-height:90px}
+button{font:inherit;font-weight:600;padding:11px 18px;border:0;border-radius:10px;background:var(--ac);color:#fff;cursor:pointer}button:disabled{opacity:.5}
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;background:var(--card);border-bottom:1px solid var(--bd);padding:8px 12px;font-weight:600}
+#ov{display:none;position:fixed;inset:0;z-index:99;background:#c00;color:#fff;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;animation:fl .5s infinite alternate}
+@keyframes fl{to{background:#600}}
+#ov button{background:#fff;color:#c00;margin-top:18px}
+@media print{body{display:none!important}}
+#wm{position:fixed;inset:0;z-index:50;pointer-events:none;overflow:hidden;display:none}
+#wm div{position:absolute;inset:-50%;transform:rotate(-30deg);display:flex;flex-wrap:wrap;gap:60px 50px;align-content:flex-start;font-weight:700;font-size:15px;color:rgba(128,128,128,.25)}
+.hide{display:none}small{opacity:.75}
+</style></head><body>
+<audio id="sil"></audio>
+<div id="wm"></div>
+<div id="ov"><div style="font-size:64px">🚨</div><h1>PELANGGARAN <span id="vn"></span>/3</h1><p id="vw"></p><p>Tindakan ini dicatat dan dilaporkan ke guru. Pelanggaran ke-3 membuat ulangan dikirim otomatis.</p><button id="back"></button></div>
+
+<main id="start">
+<div class="c" style="-webkit-user-select:text;user-select:text">
+<h2>Ulangan Dasar-Dasar Pemasaran Kelas X</h2>
+<p>Berkomunikasi dengan Pelanggan dan Pemasaran Barang dan Jasa<br><small>SMK Negeri 1 Yogyakarta · 30 PG, 4 jawaban pendek, 1 uraian · 90 menit</small></p>
+<p><select id="kl"><option value="">Pilih kelas</option><option value="X BD">X Bisnis Digital (X BD)</option><option value="X BR">X Bisnis Retail (X BR)</option></select></p>
+<p><select id="nm" disabled><option value="">Pilih kelas dulu</option></select><br><small>Pilih nama sendiri. Memilih nama teman dianggap kecurangan.</small></p>
+<ul>
+<li>Ulangan berjalan layar penuh. <b>Dilarang</b> pindah tab/aplikasi, membuka notifikasi, split screen, atau memakai shortcut.</li>
+<li>Setiap pelanggaran memunculkan alarm keras. Pelanggaran ke-3: ulangan dikirim otomatis.</li>
+<li>Layar dipasangi watermark nama dan jam Anda. Screenshot atau foto layar bisa dilacak dan dianggap kecurangan.</li>
+<li>Copy, paste, dan klik kanan dinonaktifkan. Urutan soal diacak per murid.</li>
+<li>Naikkan <b>volume media</b> HP, lalu tes alarm di bawah (1 detik). Pastikan baterai cukup dan mode Jangan Ganggu mati.</li>
+</ul>
+<p><button id="tes" type="button" style="background:#777">🔊 Tes alarm</button> <button id="go" type="button">Mulai Ulangan</button></p>
+<p id="err" style="color:#d00"></p>
+</div></main>
+
+<div id="exam" class="hide">
+<div id="bar"><span id="tm">90:00</span><span id="pr">Terjawab 0/30</span><span id="vc">Pelanggaran 0/3</span></div>
+<main id="qs"></main>
+</div>
+
+<main id="fin" class="hide"><div class="c" style="-webkit-user-select:text;user-select:text">
+<h2>✅ Ulangan selesai</h2><p id="fm"></p><p><b>Status pengiriman:</b> <span id="ss"></span> <button id="rt" type="button" class="hide">Kirim ulang</button></p>
+<p>Salin teks jawaban di bawah, lalu kirim ke guru (WhatsApp/Classroom).</p>
+<textarea id="out" readonly style="min-height:260px"></textarea>
+<p><button id="cp" type="button">Salin jawaban</button> <a id="wa" target="_blank" rel="noopener"><button type="button" style="background:#1a9e4a">Kirim via WhatsApp</button></a></p>
+</div></main>
+
+<script>
+const MC=[
+"Pengertian komunikasi yang paling tepat adalah …|Proses menawarkan produk kepada calon pembeli|Proses pertukaran gagasan, atau informasi antara dua orang atau lebih untuk mencapai tujuan tertentu|Kegiatan menyampaikan pesan, gagasan, ide, informasi, atau instruksi satu arah tanpa penerima|Kegiatan menentukan harga jual produk|Proses mengelompokkan konsumen berdasarkan kebutuhan agar sesuai",
+"Urutan proses komunikasi yang benar adalah …|Pengirim – decoding – pesan dan media – encoding – penerima – umpan balik|Pengirim – pesan dan media – encoding – penerima – decoding – umpan balik|Pengirim – encoding – decoding – pesan dan media – penerima – umpan balik|Pengirim – encoding – pesan dan media – decoding – penerima – umpan balik|Penerima – decoding – pesan dan media – encoding – pengirim – umpan balik",
+"Sebuah iklan dibuat untuk membujuk dan memengaruhi calon pembeli. Tujuan komunikasi tersebut adalah …|Informasi|Kolaborasi|Instruksi|Edukasi|Persuasi",
+"Lampu lalu lintas merupakan contoh lambang komunikasi berupa …|Warna|Gerak|Bahasa|Suara|Gambar",
+"Seorang penjual mengubah gagasan di pikirannya menjadi kalimat sapaan kepada pelanggan. Tahap ini disebut …|Decoding|Feedback|Encoding|Noise|Channel",
+"Dalam komponen komunikasi, pihak yang menerima pesan disebut …|Komunikator|Komunikan|Channel|Noise|Sumber",
+"Sales menjelaskan promo melalui WhatsApp, lalu pelanggan bertanya tentang harga. Pertanyaan harga tersebut merupakan …|Noise|Channel|Sumber|Feedback|Komunikator",
+"Berikut yang termasuk komunikasi nonverbal adalah …|Menjelaskan produk secara lisan|Mengirim pesan WhatsApp kepada pelanggan|Menulis nama dan harga produk di brosur|Membalas chat pelanggan di marketplace|Mengangguk dan menjaga kontak mata saat pelanggan berbicara",
+"Brosur dan website termasuk media komunikasi …|Visual|Audio|Audio visual|Tatap muka|Verbal dan nonverbal",
+"Pada kunci komunikasi R.E.A.C.H, huruf A (Audible) berarti …|Penjual bersikap rendah hati|Penjual memahami kebutuhan pelanggan|Pesan dapat didengar dan dipahami pelanggan|Penjual menghargai lawan bicara|Pesan disampaikan secara jelas dan tidak berbelit",
+"Produk kosmetik anti-aging paling tepat ditawarkan kepada …|Remaja|Anak-anak|Semua kalangan dengan cara yang sama|Pelajar SMK|Konsumen dewasa atau lansia",
+"Seorang pelanggan mengeluh karena sol sepatu yang baru dibelinya lepas. Penjual memotong pembicaraan, membantah, dan menjawab sambil memainkan ponsel. Unsur R.E.A.C.H yang paling jelas dilanggar penjual adalah …|Audible dan Clarification|Respect dan Empathy|Clarity dan Heart|Audible dan Environment|Humble dan Audible",
+"Sales mengirim pesan WhatsApp yang panjang dan penuh istilah asing. Pelanggan salah memahami syarat promo sehingga memesan barang yang keliru. Penyebab utama kegagalan komunikasi tersebut adalah …|WhatsApp tidak dapat dipakai sebagai media promosi|Pelanggan tidak memberikan umpan balik sama sekali|Sales tidak memiliki sumber ide pesan|Pesan kurang jelas sehingga pelanggan gagal mengartikan pesan sesuai maksud sales|Sales terlalu rendah hati dalam menyampaikan pesan",
+"Pelanggan berkata, “Harganya agak mahal, Kak.” Penjual menanggapi dengan menjelaskan kualitas dan manfaat produk. Langkah personal selling yang dilakukan penjual adalah …|Handling objections|Prospecting|Preapproach|Approach|Closing",
+"Pengelompokan pasar yang mempunyai kebutuhan dan perilaku yang sama disebut …|Targeting|Positioning|Segmentasi pasar|Bauran pemasaran|Rencana pemasaran",
+"Berikut yang termasuk jasa adalah …|Baju distro|Cuci motor|Rak minimarket|Kopi kemasan|Sepatu olahraga",
+"Lapar adalah kebutuhan. Ingin makan seblak pedas adalah …|Kebutuhan|Nilai|Diferensiasi|Segmen|Keinginan",
+"Pola preferensi pasar yang semua konsumennya memiliki preferensi kurang lebih sama dan tidak ada segmen alami disebut …|Menyebar|Mengelompok|Heterogen|Homogen|Terkonsentrasi",
+"Ibu muda, pekerja kantor, dan lansia dibedakan menurut usia, pekerjaan, dan status keluarga. Basis segmentasi yang digunakan adalah …|Demografis|Geografis|Psikografis|Perilaku|Ekonomi",
+"Sebuah kedai mengelompokkan konsumen berdasarkan gaya hidup sehat dan kepribadian mereka. Basis segmentasi yang digunakan adalah …|Geografis|Demografis|Psikografis|Perilaku|Fungsional",
+"Dalam pembelian sepatu sekolah: kakak menyarankan merek tertentu, ayah memutuskan membelinya, ibu membayar di kasir, dan siswa memakainya. Peran ibu dalam keputusan pembelian tersebut adalah …|Initiator|Buyer|User|Decider|Influencer",
+"Sebuah usaha kecil bermodal terbatas menimbang dua segmen. Segmen X sangat besar, tumbuh lambat, pesaingnya banyak, dan pasarnya sudah jenuh. Segmen Y lebih kecil, tumbuh pesat, pesaingnya sedikit, dan sesuai dengan keunggulan usaha. Keputusan yang paling tepat adalah …|Memilih segmen X karena ukuran segmen satu-satunya faktor daya tarik|Melayani X dan Y sekaligus dengan full market coverage|Tidak memilih keduanya karena pasar bersifat heterogen|Memilih segmen X karena banyaknya pesaing menandakan pasar pasti menguntungkan|Memilih segmen Y karena pertumbuhan, kompetisi yang rendah, dan kecocokan dengan kekuatan usaha lebih menarik",
+"Kedai “Seduh Rasa” hanya melayani mahasiswa dengan satu menu khusus. Strategi penargetan yang digunakan adalah …|Undifferentiated|Differentiated|Micromarketing|Concentrated|Full market coverage",
+"Minyak goreng “Kunci Mas” menonjolkan kualitas tiga kali penyaringan agar dinilai berbeda dari pesaing. Kegiatan ini merupakan …|Positioning|Segmentasi|Targeting|Rencana pemasaran|Kendali implementasi",
+"Unsur tambahan bauran pemasaran untuk jasa selain 4P adalah …|Product, price, dan place|Promotion, people, dan process|People, process, dan physical evidence|Place, process, dan physical evidence|Price, people, dan physical evidence",
+"Ruang tunggu laundry yang sempit dan kurang bersih termasuk unsur bauran pemasaran jasa …|Promotion|Place|Price|People|Physical evidence",
+"Bagian rencana pemasaran yang memuat data penjualan, biaya, pasar, pesaing, dan analisis SWOT adalah …|Ringkasan eksekutif|Analisis situasi|Strategi pemasaran|Taktik pemasaran|Proyeksi keuangan",
+"Toko pakaian “Nusantara” menjual satu model kaos dengan satu harga dan satu cara promosi untuk semua orang. Penjualan ramai pada pelajar, tetapi sepi pada ibu muda, pekerja kantor, dan lansia. Tindakan yang paling tepat adalah …|Menurunkan harga seluruh kaos|Menambah iklan khusus untuk pelajar saja|Menghentikan penjualan kaos|Mengelompokkan pasar berdasarkan usia, pekerjaan, dan status keluarga, lalu menyesuaikan produk, harga, dan promosi untuk kelompok yang dipilih|Membuka toko baru di lokasi yang sama dengan produk yang sama",
+"Sebuah kedai menargetkan mahasiswa dengan positioning “kopi enak berharga terjangkau”. Namun harga jualnya lebih mahal daripada pesaing, lokasinya jauh dari kampus, dan promosinya ditujukan kepada ibu rumah tangga. Kesimpulan yang paling tepat adalah …|Bauran pemasaran (harga, tempat, promosi) tidak konsisten dengan target pasar dan positioning sehingga product-market fit sulit tercapai|Segmentasi sudah benar sehingga bauran pemasaran tidak perlu dievaluasi|Masalahnya hanya pada produk, bukan pada unsur bauran lainnya|Positioning terlalu sempit dan harus diganti dengan full market coverage|Targeting salah karena mahasiswa bukan segmen yang dapat dilayani",
+"Sebuah merek tas diposisikan sebagai “tas murah untuk anak muda”. Namun kemasannya mewah, harganya tinggi, dan hanya dijual di butik eksklusif. Tindakan terbaik yang perlu dilakukan adalah …|Mempertahankan semua unsur karena kemasan mewah menaikkan citra|Menghentikan positioning dan menjual untuk semua segmen|Mengoordinasikan produk, harga, tempat, dan promosi agar konsisten dengan posisi murah untuk anak muda, atau melakukan reposisi bila memilih posisi baru|Menaikkan harga lagi untuk memperkuat positioning|Menambah promosi tanpa mengubah unsur bauran yang lain"];
+const SA=["Sebutkan kepanjangan R.E.A.C.H beserta arti singkat setiap hurufnya!","Sebutkan enam langkah personal selling secara berurutan!","Sebutkan empat basis segmentasi konsumen akhir!","Sebutkan lima dimensi diferensiasi yang dapat digunakan untuk membangun posisi produk!"];
+const ES="Kedai “Kopi Senja” menjual kopi susu dalam botol. Pemilik menargetkan pekerja kantor berusia 25–35 tahun di pusat kota yang bergaya hidup praktis, dan memosisikan produknya sebagai “kopi praktis tanpa antre”. Namun promosi justru dilakukan di lingkungan kampus, kopi hanya dijual di satu kedai kecil di pinggir kota dengan antrean panjang, dan penjualnya menawarkan produk sambil berbicara terlalu cepat tanpa bertanya kebutuhan pelanggan serta tidak memperhatikan ekspresi pelanggan.";
+const EQ=["a. Tentukan minimal dua basis segmentasi yang digunakan pemilik dan strategi penargetan yang dipakai beserta alasannya!","b. Analisislah dua unsur bauran pemasaran yang tidak konsisten dengan target pasar dan positioning, lalu berikan perbaikan untuk masing-masing unsur!","c. Analisislah kesalahan komunikasi penjual berdasarkan R.E.A.C.H (minimal dua unsur) dan tuliskan satu contoh kalimat perbaikannya!"];
+
+const SUBMIT_URL="GANTI_DENGAN_URL_APPS_SCRIPT";
+const $=s=>document.querySelector(s),L="ABCDE",MAXV=3,MIN=90;
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+let ac,osc,gain,sv,started=false,done=false,locked=false,fsOK=false,viol=0,log=[],end=0,w0=innerWidth,o0=innerWidth>innerHeight;
+
+const ROSTER={"BD":["ADISTY RISKY PURWANTO","ADITYA WIKAN PRATAMA","ADZIKRA ROKUHANO","AILA PUTRI","ALIF DAFFA PUTRA NABAWI","ARI CINTA CAHYANINGRUM","ARISTA DIAH CAHYANI","ASYIFA TABRIZ SAJIDA","ASYRAF DIKATORRESA RAMADANI","AURELLI TIFFANY RISWANTO","DARA BRILLIAN PRAMESTY HIDAYAH","DARAEN CLEVERICH ATARUBBY","DZAKIA AISHA AZALIA","ELRIZKY ARYA DEVAN","FANYA RAMADHANI ADHIGUNA","FARAH DIAZ LATIFAHTUSSYIFA","HAMASAH KHANSA IFTINAN","KAIRAVA VICIUS SANOVERDI","KEYLA FANNY APRILIA","KHEYLA MEYSHIFA INSANI","LAURA ANGELICA SAPUTRI","NABILLA KARISA SAPUTRI","NAJWA ALIFATUL HILMI","NAUFAL YULIAN SAPUTRA","NILMAR AHMAD BALLIGHNI MUNAAYA","PASIFIKA AJENG PUTRI SYAFIRA","RADEN AJENG DYAH NUR LATHIFA ALISSA","REFALINA WULANDARI","REGINA DHIA WIJAYA","RIBKA NATHANIELA RINAKIT NADA AYUNINGTYAS","SHAQIRA RAMADHANI GUSTIMORDIQNA","SINDI PUTRI KHALIFAH","SYAFA NOVINDRA SARI","SYIFA ARMEYFA WIYANTORO","UFAIRANAYA ASHLEY KIRANA PUTRI HANAFI","YASMINE SAPUTRI"],"BR":["ADELIA EMERY CALLYSTA","ADELINA PUTRI ELYSIA WICAKSONO","AIRA ISNAINI BUNGA SEPTANTI","ALMIRA ANAYA AZ-ZAHRA","ANISAH AMELIA ZAHRA","ARKANA ABIASA JAYA RAMADHAN","ASSIFA DIVA SAFITRI","AZALIA AMYA FARAH DIERA","AZORA TERTIA SALWA CHAERUNNISA","AZZIADATUSH IVANA AZALIA","BELVA AZZUFAR","BRONJULIORINO JUSTICEANOBAVANA SIMANJUNTAK","ENDJELINA CAHYA MAHARANI","EVIERA SALSABILLA OKTAVIANNI","FARAH AULIA AZHAR","FEBRIANTI PRIYA PUSPITASARI","FILIA ELVINA SYARIFAH","HAURA ATIKAH SALSABILA","HAYUNINGTYAS","INESTHA HANUNG TRI HAPSARI","KEYANDRE JUSTINE HERMAWAN","LINTANG RATRI MULTIASARI","LUTHFIYAH ANINDYA","MADINA SYAFIRA HUSNA","MUHAMMAD SYARIF MAULANA","NAZRIELLA DHEAN RACHEL","NEYSHA ALIFIYA ARIEF PUTRI","NILAM PERMATASARI","NUUR LAILI FAHMAA","OLIVIA LISTYANY RAHMAWATY","PUTRI CHANTICA ANGELIC","RAYYA NARADYA","REGINA AVA MAHARANI","RIZKY ANANDA SAPUTRA","SALWA FARIDAH","ZAHWA MARYAM SAYYIDINA"]};
+const NM=()=>$("#nm").value,KL=()=>{const o=$("#nm").selectedOptions[0];return $("#kl").value+" / "+(o&&o.dataset.no||"")};
+$("#kl").onchange=()=>{const n=$("#nm"),l=ROSTER[$("#kl").value.slice(2).trim()]||[];n.innerHTML=l.length?'<option value="">Pilih nama Anda</option>'+l.map((x,i)=>`<option value="${esc(x)}" data-no="${i+1}">${i+1}. ${esc(x)}</option>`).join(""):'<option value="">Pilih kelas dulu</option>';n.disabled=!l.length};
+function silentWav(){const n=4000,b=new ArrayBuffer(44+n),v=new DataView(b),s=(o,t)=>[...t].forEach((c,i)=>v.setUint8(o+i,c.charCodeAt(0)));s(0,"RIFF");v.setUint32(4,36+n,true);s(8,"WAVEfmt ");v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,8000,true);v.setUint32(28,8000,true);v.setUint16(32,1,true);v.setUint16(34,8,true);s(36,"data");v.setUint32(40,n,true);for(let i=0;i<n;i++)v.setUint8(44+i,128);return URL.createObjectURL(new Blob([b],{type:"audio/wav"}))}
+function audioInit(){if(ac)return;try{ac=new(window.AudioContext||window.webkitAudioContext)();osc=ac.createOscillator();gain=ac.createGain();gain.gain.value=0;osc.type="square";osc.connect(gain);gain.connect(ac.destination);osc.start();ac.resume()}catch(e){}
+try{const a=$("#sil");a.src=silentWav();a.loop=true;a.play().catch(()=>{})}catch(e){}}
+function sirenOn(){if(!ac)return;ac.resume();gain.gain.value=1;clearInterval(sv);let t=0;sv=setInterval(()=>{t+=.04;osc.frequency.value=900+500*Math.sin(t*7.5)},40);try{navigator.vibrate&&navigator.vibrate([600,150,600,150,600,150,600,150,600])}catch(e){}}
+function sirenOff(){if(gain)gain.gain.value=0;clearInterval(sv);try{navigator.vibrate&&navigator.vibrate(0)}catch(e){}}
+async function fs(){try{await document.documentElement.requestFullscreen();fsOK=true}catch(e){}}
+
+$("#tes").onclick=()=>{audioInit();sirenOn();setTimeout(sirenOff,1000)};
+
+$("#go").onclick=async()=>{
+ if(!$("#nm").value||!$("#kl").value){$("#err").textContent="Pilih kelas dan nama dulu.";return}
+ audioInit();await fs();
+ try{navigator.wakeLock&&navigator.wakeLock.request("screen")}catch(e){}
+ build();wm();$("#start").classList.add("hide");$("#exam").classList.remove("hide");
+ end=Date.now()+MIN*60000;scrollTo(0,0);
+ setTimeout(()=>{started=true;w0=innerWidth;o0=innerWidth>innerHeight},800);
+ setInterval(tick,1000);tick();
+};
+
+function build(){
+ const order=[...MC.keys()].sort(()=>Math.random()-.5);let h="";
+ order.forEach(k=>{const p=MC[k].split("|");
+  h+=`<section class="c"><p><b>${k+1}.</b> ${esc(p[0])}</p>`+p.slice(1).map((o,j)=>`<label><input type="radio" name="q${k}" value="${L[j]}"><span><b>${L[j]}.</b> ${esc(o)}</span></label>`).join("")+`</section>`});
+ h+=`<section class="c"><h3>II. Jawaban Pendek</h3>`+SA.map((q,i)=>`<p><b>${i+1}.</b> ${esc(q)}</p><textarea id="s${i}"></textarea>`).join("")+`</section>`;
+ h+=`<section class="c"><h3>III. Uraian</h3><p>${esc(ES)}</p>`+EQ.map((q,i)=>`<p><b>${esc(q)}</b></p><textarea id="e${i}"></textarea>`).join("")+`</section>`;
+ h+=`<p><button id="sb" type="button" style="width:100%">Kirim Jawaban</button></p>`;
+ $("#qs").innerHTML=h;
+ $("#qs").addEventListener("change",prog);
+ let armed=0;$("#sb").onclick=function(){if(Date.now()<armed){submit(false)}else{armed=Date.now()+5000;this.textContent="Yakin kirim? Tap sekali lagi (5 dtk)";setTimeout(()=>this.textContent="Kirim Jawaban",5000)}};
+}
+function getAns(k){const r=document.querySelector(`input[name=q${k}]:checked`);return r?r.value:""}
+function prog(){let n=0;for(let k=0;k<30;k++)if(getAns(k))n++;$("#pr").textContent=`Terjawab ${n}/30`}
+function wm(){const t=NM()+" · "+KL()+" · "+new Date().toLocaleTimeString("id-ID");$("#wm").innerHTML="<div>"+Array(300).fill("<span>"+esc(t)+"</span>").join("")+"</div>";$("#wm").style.display="block"}
+function tick(){if(done)return;if(Math.floor(Date.now()/1000)%30===0)wm();const r=Math.max(0,end-Date.now()),m=Math.floor(r/60000),s=Math.floor(r/1000)%60;$("#tm").textContent=`⏱ ${m}:${String(s).padStart(2,"0")}`;if(r<=0)submit(false,"Waktu habis")}
+
+function vio(why){
+ if(!started||done||locked)return;locked=true;viol++;
+ log.push(new Date().toLocaleTimeString("id-ID")+" – "+why);$("#vc").textContent=`Pelanggaran ${viol}/${MAXV}`;
+ sirenOn();
+ if(viol>=MAXV){submit(true,"Pelanggaran ke-3");setTimeout(sirenOff,7000);return}
+ $("#vn").textContent=viol;$("#vw").textContent=why;$("#ov").style.display="flex";
+ let s=5;const b=$("#back");b.disabled=true;b.textContent="Tunggu 5 dtk…";
+ const iv=setInterval(()=>{s--;if(s>0){b.textContent=`Tunggu ${s} dtk…`}else{clearInterval(iv);b.disabled=false;b.textContent="Saya kembali mengerjakan"}},1000);
+}
+$("#back").onclick=async()=>{sirenOff();await fs();$("#ov").style.display="none";setTimeout(()=>locked=false,700)};
+
+document.addEventListener("visibilitychange",()=>{if(document.hidden)vio("Meninggalkan tab/aplikasi ulangan")});
+addEventListener("blur",()=>vio("Layar kehilangan fokus (aplikasi lain, notifikasi, split screen, atau shortcut)"));
+document.addEventListener("fullscreenchange",()=>{if(started&&!done&&fsOK&&!document.fullscreenElement)vio("Keluar dari layar penuh")});
+addEventListener("pagehide",()=>{if(started&&!done)vio("Menutup/memuat ulang halaman")});
+addEventListener("beforeunload",e=>{if(started&&!done){e.preventDefault();e.returnValue=""}});
+addEventListener("keydown",e=>{if(!started||done)return;const k=e.key;
+ if(e.ctrlKey||e.altKey||e.metaKey||/^F\d+$/.test(k)||k==="Escape"||k==="PrintScreen"||k==="ContextMenu"){e.preventDefault();vio("Shortcut keyboard: "+(e.ctrlKey?"Ctrl+":"")+(e.altKey?"Alt+":"")+(e.metaKey?"Win/Cmd+":"")+k)}},true);
+addEventListener("keyup",e=>{if(started&&!done&&e.key==="PrintScreen"){try{navigator.clipboard.writeText("Screenshot dilarang")}catch(_){}vio("Menekan tombol PrintScreen (screenshot)")}},true);
+["copy","cut","paste","contextmenu","dragstart"].forEach(t=>addEventListener(t,e=>{if(started&&!done)e.preventDefault()}));
+addEventListener("resize",()=>{const w=innerWidth,o=w>innerHeight;
+ if(started&&!done&&o===o0&&w<w0*.75)vio("Ukuran jendela berubah (split screen/floating window)");
+ if(o!==o0||w>w0){w0=w;o0=o}});
+
+function submit(forced,why){
+ if(done)return;done=true;started=false;if(!forced)sirenOff();
+ const nm=NM(),kl=KL();
+ const pg=[...Array(30).keys()].map(k=>(k+1)+(getAns(k)||"-")).join(" ");
+ let t=`HASIL ULANGAN DASAR-DASAR PEMASARAN KELAS X\nNama: ${nm}\nKelas/Absen: ${kl}\nWaktu kirim: ${new Date().toLocaleString("id-ID")}${why?"\nPengiriman otomatis: "+why:""}\nPelanggaran: ${viol}${log.length?"\n"+log.map(x=>"- "+x).join("\n"):""}\n\nI. PILIHAN GANDA\n${pg}\n\nII. JAWABAN PENDEK\n`;
+ SA.forEach((q,i)=>t+=`${i+1}) ${$("#s"+i).value.trim()||"-"}\n`);
+ t+="\nIII. URAIAN\n";EQ.forEach((q,i)=>t+=`${"abc"[i]}. ${$("#e"+i).value.trim()||"-"}\n`);
+ $("#out").value=t;PAY={id:Date.now().toString(36)+Math.random().toString(36).slice(2,8),nama:nm,kelas:kl,pg:[...Array(30).keys()].map(k=>getAns(k)),sa:SA.map((q,i)=>$("#s"+i).value.trim()),es:EQ.map((q,i)=>$("#e"+i).value.trim()),viol:viol,log:log.join(" | "),auto:why||""};send();$("#wa").href="https://wa.me/?text="+encodeURIComponent(t);
+ $("#fm").textContent=why?`Ulangan dikirim otomatis (${why}).`:"Jawaban Anda sudah direkam di halaman ini.";
+ $("#ov").style.display="none";$("#wm").style.display="none";$("#exam").classList.add("hide");$("#fin").classList.remove("hide");
+ try{document.fullscreenElement&&document.exitFullscreen()}catch(e){}scrollTo(0,0);
+}
+let PAY=null;
+async function send(){const ss=$("#ss"),rt=$("#rt");rt.classList.add("hide");
+ if(!/^https:\/\/script\.google\.com\//.test(SUBMIT_URL)){ss.textContent="⚠ Belum tersambung ke Google Sheet. Salin jawaban di bawah dan kirim ke guru.";return}
+ ss.textContent="mengirim…";const h={"Content-Type":"text/plain;charset=utf-8"},b=JSON.stringify(PAY);
+ try{const r=await fetch(SUBMIT_URL,{method:"POST",headers:h,body:b});const j=await r.json();if(j.ok){ss.textContent="✅ Terkirim ke guru.";return}throw 0}
+ catch(e){try{await fetch(SUBMIT_URL,{method:"POST",mode:"no-cors",headers:h,body:b});ss.textContent="Terkirim, tetapi belum terkonfirmasi. Simpan teks di bawah sebagai cadangan dan beri tahu guru."}
+  catch(e2){ss.textContent="❌ Gagal terkirim (periksa sinyal). Tekan Kirim ulang."}}
+ rt.classList.remove("hide")}
+$("#rt").onclick=send;
+$("#cp").onclick=async()=>{const o=$("#out");o.select();try{await navigator.clipboard.writeText(o.value);$("#cp").textContent="Tersalin ✔"}catch(e){document.execCommand&&document.execCommand("copy")}};
+</script></body></html>
