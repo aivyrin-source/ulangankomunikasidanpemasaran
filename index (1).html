@@ -91,7 +91,7 @@ const SA=["Sebutkan kepanjangan R.E.A.C.H beserta arti singkat setiap hurufnya!"
 const ES="Kedai “Kopi Senja” menjual kopi susu dalam botol. Pemilik menargetkan pekerja kantor berusia 25–35 tahun di pusat kota yang bergaya hidup praktis, dan memosisikan produknya sebagai “kopi praktis tanpa antre”. Namun promosi justru dilakukan di lingkungan kampus, kopi hanya dijual di satu kedai kecil di pinggir kota dengan antrean panjang, dan penjualnya menawarkan produk sambil berbicara terlalu cepat tanpa bertanya kebutuhan pelanggan serta tidak memperhatikan ekspresi pelanggan.";
 const EQ=["a. Tentukan minimal dua basis segmentasi yang digunakan pemilik dan strategi penargetan yang dipakai beserta alasannya!","b. Analisislah dua unsur bauran pemasaran yang tidak konsisten dengan target pasar dan positioning, lalu berikan perbaikan untuk masing-masing unsur!","c. Analisislah kesalahan komunikasi penjual berdasarkan R.E.A.C.H (minimal dua unsur) dan tuliskan satu contoh kalimat perbaikannya!"];
 
-const SUBMIT_URL="GANTI_DENGAN_URL_APPS_SCRIPT";
+const SUBMIT_URL="https://script.google.com/macros/s/AKfycbxlkncChHmMrMBOSs_p_mts131isCMGjmCYI16GjcS4a9IHvC5rnsA3Wn81bPxbWwJa/exec";
 const $=s=>document.querySelector(s),L="ABCDE",MAXV=3,MIN=90;
 const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
 let ac,osc,gain,sv,started=false,done=false,locked=false,fsOK=false,viol=0,log=[],end=0,w0=innerWidth,o0=innerWidth>innerHeight;
@@ -172,7 +172,7 @@ function submit(forced,why){
 }
 let PAY=null;
 async function send(){const ss=$("#ss"),rt=$("#rt");rt.classList.add("hide");
- if(!/^https:\/\/script\.google\.com\//.test(SUBMIT_URL)){ss.textContent="⚠ Belum tersambung ke Google Sheet. Salin jawaban di bawah dan kirim ke guru.";return}
+ if(!/^https:\/\/script\.google\.com\//.test(SUBMIT_URL)){ss.textContent="⚠";return}
  ss.textContent="mengirim…";const h={"Content-Type":"text/plain;charset=utf-8"},b=JSON.stringify(PAY);
  try{const r=await fetch(SUBMIT_URL,{method:"POST",headers:h,body:b});const j=await r.json();if(j.ok){ss.textContent="✅ Terkirim ke guru.";return}throw 0}
  catch(e){try{await fetch(SUBMIT_URL,{method:"POST",mode:"no-cors",headers:h,body:b});ss.textContent="Terkirim, tetapi belum terkonfirmasi. Simpan teks di bawah sebagai cadangan dan beri tahu guru."}
